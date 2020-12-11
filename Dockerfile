@@ -1,4 +1,4 @@
-FROM php:7.4.12-apache-buster
+FROM php:7.4.13-apache-buster
 
 # Install debian dependencies
 # libbz2-dev needed for php bz2 extension
