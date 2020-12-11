@@ -1,3 +1,3 @@
-Docker PHP with Extensions
+Docker CakePHP base
 ===
-PHP with extensions pre-installed.
+PHP with extensions required for CakePHP. Includes Composer.
