@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.4.12"
+ARG PHP_VERSION="7.4.13"
 
 FROM php:${PHP_VERSION}-apache-buster
 
