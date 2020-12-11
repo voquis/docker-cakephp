@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.4.13"
+ARG PHP_VERSION="7.4.11"
 
 FROM php:${PHP_VERSION}-apache-buster
 
@@ -8,7 +8,9 @@ RUN apt-get update -y
 
 # Install underlying dependencies
 RUN apt-get install -y \
-    libicu-dev
+    libicu-dev \
+    unzip \
+    zip
 
 # Install Composer
 RUN curl -o /usr/local/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
