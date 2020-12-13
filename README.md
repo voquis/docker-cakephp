@@ -5,7 +5,7 @@ PHP with extensions required for [CakePHP 4](https://book.cakephp.org/4/en/insta
 This image may be used directly for development or as a base for deploying an existing application.  In both cases it is assumed a MySQL server is needed by the application.
 
 # Using as a development container
-
+This section describes how to maunally create a development container.  For a simpler docker-compose deployment for an existing CakePHP project, see later in this guide.
 ## Creating a Docker network
 In order for the CakePHP container to be able to resolve the MySQL container by hostname, both containers need to be on the same Docker network.
 ```shell
@@ -65,7 +65,6 @@ apachectl start
 This step is necessary because apache is configured with a webroot of `/var/www/html/webroot` which does not exist when the container starts (causing the apache process to exit) but is created after the CakePHP project is.
 
 The application will be available at http://127.0.0.1:2531 on the host machine.
-
 # Using as a base for an existing project
 Create a `Dockerfile` in the root of your existing CakePHP directory with the following content:
 
@@ -96,3 +95,55 @@ docker run -it \
        my/company/name:tag \
        bash
 ```
+
+# Using as a development container with Docker Compose
+Docker compose is a convenient way of starting multiple related containers.
+It will create a new network for the related containers.
+Create a `docker-compose.yaml` file in the root of your project with the following content.
+Note the similarity in arguments between starting the containers manually and the codified version in the `docker-compose.yaml` file.
+Some additional options for the mysql database are added to assist with debugging.
+Note also that the database port (`3306`) is published as `2533` for connecting from the host machine with a MySQL client for database administration.
+
+```yaml
+version: "3.7"
+
+services:
+  # MySQL database container
+  my-app-mysql:
+    image: "mysql:5.7.31"
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: "cake"
+      MYSQL_USER: "cake"
+      MYSQL_PASSWORD: "cake"
+    ports:
+      - "2533:3306"
+    command: [
+      "--general_log=1",
+      "--general_log_file=/var/log/mysql/general.log",
+      "--slow_query_log=1"
+    ]
+  # CakePHP development container
+  my-app-cakephp:
+    image: "voquis/cakephp:7.4.11-apache-buster"
+    environment:
+      DATABASE_URL: "mysql://cake:cake@my-app-mysql/cake?encoding=utf8mb4&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
+      DEBUG: "false"
+      SECURITY_SALT: "abc123"
+    volumes:
+      - type: "bind"
+        source: "./"
+        target: "/var/www/html"
+    ports:
+      - "2532:80"
+```
+
+Start the containers with:
+```shell
+docker-compose up
+```
+
+The application will be available at http://127.0.0.1:2532 on the host machine.
+
+To quite the stack but leave the containers, use `Ctrl+c`.  The next time you need the containers, use `docker-compose up` again.
+To destroy the containers, use `docker-compose down`.
