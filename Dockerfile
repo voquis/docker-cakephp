@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.4.13"
+ARG PHP_VERSION="7.4.11"
 
 FROM php:${PHP_VERSION}-apache-buster
 
@@ -23,3 +23,9 @@ RUN docker-php-ext-install \
 
 # Enable apache module for URL re-writing
 RUN a2enmod rewrite
+
+# Copy apache config to update document root to webroot
+COPY apache/000-default.conf /etc/apache2/sites-enabled
+
+# Add Cake command line tools to path
+RUN echo "export PATH=/var/www/html/bin:$PATH" >> /root/.bashrc
