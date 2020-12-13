@@ -45,7 +45,7 @@ docker run -it \
        -e DEBUG=true \
        -e SECURITY_SALT=abc123 \
        -e DATABASE_URL="mysql://cake:cake@my-app-mysql/cake?encoding=utf8mb4&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false" \
-       voquis/cakephp:7.4.11-apache-buster \
+       voquis/cakephp:7.4.12-apache-buster \
        bash
 ```
 
@@ -69,7 +69,7 @@ The application will be available at http://127.0.0.1:2531 on the host machine.
 Create a `Dockerfile` in the root of your existing CakePHP directory with the following content:
 
 ```dockerfile
-FROM voquis/cakephp:7.4.11-apache-buster
+FROM voquis/cakephp:7.4.12-apache-buster
 
 # Copy application and config files
 COPY . .
@@ -125,7 +125,7 @@ services:
     ]
   # CakePHP development container
   my-app-cakephp:
-    image: "voquis/cakephp:7.4.11-apache-buster"
+    image: "voquis/cakephp:7.4.12-apache-buster"
     environment:
       DATABASE_URL: "mysql://cake:cake@my-app-mysql/cake?encoding=utf8mb4&timezone=UTC&cacheMetadata=true&quoteIdentifiers=false&persistent=false"
       DEBUG: "false"
