@@ -26,10 +26,12 @@ RUN docker-php-ext-install \
     pdo_mysql
 
 # Enable apache module for URL re-writing
-RUN a2enmod rewrite
+RUN a2enmod rewrite headers
 
-# Copy apache config to update document root to webroot
+# Copy apache and php configs
 COPY apache/000-default.conf /etc/apache2/sites-enabled
+COPY apache/security.conf /etc/apache2/conf-available/security.conf
+COPY php/php.ini /usr/local/etc/php/php.ini
 
 # Add Cake command line tools to path
 RUN echo "export PATH=/var/www/html/bin:$PATH" >> /root/.bashrc
