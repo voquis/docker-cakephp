@@ -1,8 +1,8 @@
-ARG PHP_VERSION="7.4.16"
+ARG PHP_VERSION="7.4.19"
 
 FROM php:${PHP_VERSION}-apache-buster
 
-ARG COMPOSER_VERSION="2.0.8"
+ARG COMPOSER_VERSION="2.0.13"
 
 RUN apt-get update -y
 
@@ -21,6 +21,7 @@ RUN chmod +x /usr/local/bin/composer
 
 # Install PHP extensions
 RUN docker-php-ext-install \
+    bcmath \
     gd \
     intl \
     pdo_mysql
