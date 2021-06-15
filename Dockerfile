@@ -1,6 +1,6 @@
-ARG PHP_VERSION="7.4.19"
+ARG PHP_VERSION="5.6.40"
 
-FROM php:${PHP_VERSION}-apache-buster
+FROM php:${PHP_VERSION}-apache-stretch
 
 ARG COMPOSER_VERSION="2.0.13"
 
@@ -10,6 +10,7 @@ RUN apt-get update -y
 # gd requres: libpng-dev, zlib1g-dev
 RUN apt-get install -y \
     libicu-dev \
+    libmcrypt-dev \
     libpng-dev \
     unzip \
     zip \
@@ -24,6 +25,7 @@ RUN docker-php-ext-install \
     bcmath \
     gd \
     intl \
+    mcrypt \
     pdo_mysql
 
 # Enable apache module for URL re-writing
@@ -35,4 +37,4 @@ COPY apache/security.conf /etc/apache2/conf-available/security.conf
 COPY php/php.ini /usr/local/etc/php/php.ini
 
 # Add Cake command line tools to path
-RUN echo "export PATH=/var/www/html/bin:$PATH" >> /root/.bashrc
+RUN echo "export PATH=/var/www/html/app/Console:$PATH" >> /root/.bashrc
