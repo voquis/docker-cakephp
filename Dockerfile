@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.4.19"
+ARG PHP_VERSION="7.4.26"
 
 FROM php:${PHP_VERSION}-apache-buster
 
@@ -9,6 +9,7 @@ RUN apt-get update -y
 # Install underlying dependencies
 # gd requres: libpng-dev, zlib1g-dev
 RUN apt-get install -y \
+    git \
     libicu-dev \
     libpng-dev \
     unzip \
