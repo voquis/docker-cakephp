@@ -1,8 +1,8 @@
-ARG PHP_VERSION="7.4.26"
+ARG PHP_VERSION="7.4.33"
 
 FROM php:${PHP_VERSION}-apache-buster
 
-ARG COMPOSER_VERSION="2.0.13"
+ARG COMPOSER_VERSION="2.5.1"
 
 RUN apt-get update -y
 
