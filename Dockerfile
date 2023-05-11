@@ -1,15 +1,17 @@
-ARG PHP_VERSION="8.1.13"
+ARG PHP_VERSION="8.1.18"
 
 FROM php:${PHP_VERSION}-apache-buster
 
-ARG COMPOSER_VERSION="2.5.1"
+ARG COMPOSER_VERSION="2.5.5"
 
 RUN apt-get update -y
 
 # Install underlying dependencies
-# gd requres: libpng-dev, zlib1g-dev
+# gd requires: libpng-dev, zlib1g-dev
+# curl requires: libcurl4-openssl-dev
 RUN apt-get install -y \
     git \
+    libcurl4-openssl-dev \
     libicu-dev \
     libpng-dev \
     unzip \
@@ -23,6 +25,7 @@ RUN chmod +x /usr/local/bin/composer
 # Install PHP extensions
 RUN docker-php-ext-install \
     bcmath \
+    curl \
     gd \
     intl \
     pdo_mysql
