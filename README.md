@@ -80,7 +80,13 @@ RUN composer install --no-dev
 
 Build a new image using this dockerfile with:
 ```shell
-docker build -t my/company/name:tag .
+docker build \
+  -t my/company/name:tag \
+  --build-arg COMPOSER_VERSION=2.8.5 \
+  --build-arg DEBIAN_VERSION=bookworm \
+  --build-arg PHP_VERSION=8.2.27 \
+  --build-arg SERVER=apache \
+  .
 ```
 
 Run the newly built container with:
