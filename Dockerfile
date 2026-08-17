@@ -1,9 +1,14 @@
+# The following args need to be repeated after the FROM statement
 ARG PHP_VERSION
 ARG DEBIAN_VERSION
+ARG SERVER
 
-FROM php:${PHP_VERSION}-apache-${DEBIAN_VERSION}
+FROM php:${PHP_VERSION}-${SERVER}-${DEBIAN_VERSION}
 
-ARG COMPOSER_VERSION
+# Repeatd from above because before FROM scope is not applied after FROM
+ARG PHP_VERSION
+ARG DEBIAN_VERSION
+ARG SERVER
 
 RUN apt-get update -y
 
@@ -32,12 +37,15 @@ RUN docker-php-ext-install \
     pdo_mysql
 
 # Enable apache module for URL re-writing
-RUN a2enmod rewrite headers
+# Configure apache security module
+RUN if [ "$SERVER" = "apache" ]; then \
+    a2enmod rewrite headers && \
+    a2enconf security; \
+fi
 
-# Copy apache and php configs
-COPY apache/000-default.conf /etc/apache2/sites-enabled
-COPY apache/security.conf /etc/apache2/conf-available/security.conf
+# Copy php configs
 COPY php/php.ini /usr/local/etc/php/php.ini
 
-# Add Cake command line tools to path
-RUN echo "export PATH=/var/www/html/bin:$PATH" >> /root/.bashrc
+# Copy apache configs (unused by fpm)
+COPY apache/000-default.conf /etc/apache2/sites-enabled
+COPY apache/security.conf /etc/apache2/conf-available/security.conf
