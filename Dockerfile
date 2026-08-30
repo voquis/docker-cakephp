@@ -2,6 +2,7 @@
 ARG PHP_VERSION
 ARG DEBIAN_VERSION
 ARG SERVER
+ARG COMPOSER_VERSION
 
 FROM php:${PHP_VERSION}-${SERVER}-${DEBIAN_VERSION}
 
@@ -9,6 +10,7 @@ FROM php:${PHP_VERSION}-${SERVER}-${DEBIAN_VERSION}
 ARG PHP_VERSION
 ARG DEBIAN_VERSION
 ARG SERVER
+ARG COMPOSER_VERSION
 
 RUN apt-get update -y
 
@@ -25,8 +27,9 @@ RUN apt-get install -y \
     zlib1g-dev
 
 # Install Composer
-RUN curl -o /usr/local/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar
-RUN chmod +x /usr/local/bin/composer
+RUN curl -fsSLo /usr/local/bin/composer https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar \
+    && chmod +x /usr/local/bin/composer \
+    && composer --version
 
 # Install PHP extensions
 RUN docker-php-ext-install \
